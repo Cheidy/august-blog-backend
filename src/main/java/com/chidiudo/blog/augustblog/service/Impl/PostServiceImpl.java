@@ -36,6 +36,19 @@ public class PostServiceImpl implements PostService {
 
         return savedPost.isPresent() ? savedPost.get() : null;
     }
+
+    @Override
+    public boolean deletePost(Long postId) {
+        Optional<Post> savedPost = postRepository.findById(postId);
+
+        if (savedPost.isPresent()) {
+            postRepository.deleteById(postId);
+            return true;
+        }
+        return false;
+    }
+
+
 }
 
 

@@ -42,4 +42,11 @@ public class PostController {
         return post != null ?
                 new ResponseEntity<>(post, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @DeleteMapping("/deletepost")
+    public ResponseEntity deletePost(@RequestParam(value = "postid") Long postId) {
+
+        return (postService.deletePost(postId)) ?
+                new ResponseEntity(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
 }
