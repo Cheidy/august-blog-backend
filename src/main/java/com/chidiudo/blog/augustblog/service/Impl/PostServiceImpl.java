@@ -38,7 +38,6 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post getPostById(Long postId) {
-        //Optional<Post> savedPost = postRepository.findById(postId);
 
         return checkForPost(postId).isPresent() ? checkForPost(postId).get() : null;
     }
