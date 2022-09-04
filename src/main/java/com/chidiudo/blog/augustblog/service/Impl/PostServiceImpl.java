@@ -1,6 +1,5 @@
 package com.chidiudo.blog.augustblog.service.Impl;
 
-import com.chidiudo.blog.augustblog.dto.PostDto;
 import com.chidiudo.blog.augustblog.entity.Post;
 import com.chidiudo.blog.augustblog.repository.PostRepository;
 import com.chidiudo.blog.augustblog.service.PostService;
@@ -18,7 +17,14 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private PostRepository postRepository;
 
+    @Autowired
+    private ModelMapper modelMapper;
 
+
+    @Override
+    public Optional<Post> checkForPost(Long postId) {
+        return postRepository.findById(postId);
+    }
 
     @Override
     public Post createPost(Post post) {
@@ -32,17 +38,35 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post getPostById(Long postId) {
-        Optional<Post> savedPost = postRepository.findById(postId);
+        //Optional<Post> savedPost = postRepository.findById(postId);
 
-        return savedPost.isPresent() ? savedPost.get() : null;
+        return checkForPost(postId).isPresent() ? checkForPost(postId).get() : null;
     }
 
     @Override
     public boolean deletePost(Long postId) {
-        Optional<Post> savedPost = postRepository.findById(postId);
+        //Optional<Post> savedPost = postRepository.findById(postId);
 
-        if (savedPost.isPresent()) {
+        if (checkForPost(postId).isPresent()) {
             postRepository.deleteById(postId);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean updatePost(Long postId, Post post) {
+        //Optional<Post> savedPost = postRepository.findById(postId);
+        //Post updatedPost = savedPost.get();
+        //System.out.println(savedPost);
+
+
+        if (checkForPost(postId).isPresent()) {
+            Post updatedPost = checkForPost(postId).get();
+            modelMapper.map(post, updatedPost);
+
+
+        postRepository.save(updatedPost);
             return true;
         }
         return false;

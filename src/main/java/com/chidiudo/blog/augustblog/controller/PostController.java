@@ -49,4 +49,14 @@ public class PostController {
         return (postService.deletePost(postId)) ?
                 new ResponseEntity(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
+
+    @PutMapping("/updatepost/{postid}")
+    public ResponseEntity<Post> updatePost(@PathVariable(value = "postid") Long postId,
+                                     @RequestBody PostDto postDto) {
+        Post post = modelMapper.map(postDto, Post.class);
+
+        return (postService.updatePost(postId, post)) ? new ResponseEntity<>(HttpStatus.OK) :
+                new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
 }
