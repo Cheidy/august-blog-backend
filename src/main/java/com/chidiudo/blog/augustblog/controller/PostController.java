@@ -50,8 +50,8 @@ public class PostController {
                 new ResponseEntity(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping("/updatepost/{postid}")
-    public ResponseEntity<Post> updatePost(@PathVariable(value = "postid") Long postId,
+    @PutMapping("/updatepost/")
+    public ResponseEntity<Post> updatePost(@RequestParam(value = "postid") Long postId,
                                      @RequestBody PostDto postDto) {
         Post post = modelMapper.map(postDto, Post.class);
 

@@ -59,15 +59,6 @@ public class PostServiceImpl implements PostService {
         //Post updatedPost = savedPost.get();
         //System.out.println(savedPost);
 
-
-        if (checkForPost(postId).isPresent()) {
-            Post updatedPost = checkForPost(postId).get();
-            modelMapper.map(post, updatedPost);
-
-
-        postRepository.save(updatedPost);
-            return true;
-        }
         return false;
     }
 
