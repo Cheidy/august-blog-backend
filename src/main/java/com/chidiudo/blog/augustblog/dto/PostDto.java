@@ -4,6 +4,10 @@ import lombok.Data;
 
 import java.util.Set;
 
+/**
+ *
+ * @author chidiudo
+ */
 
 @Data
 public class PostDto {

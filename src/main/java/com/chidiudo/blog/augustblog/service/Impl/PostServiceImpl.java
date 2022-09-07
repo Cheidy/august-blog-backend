@@ -1,5 +1,6 @@
 package com.chidiudo.blog.augustblog.service.Impl;
 
+
 import com.chidiudo.blog.augustblog.entity.Post;
 import com.chidiudo.blog.augustblog.repository.PostRepository;
 import com.chidiudo.blog.augustblog.service.PostService;
@@ -10,6 +11,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ *
+ * @author chidiudo
+ */
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -21,10 +26,12 @@ public class PostServiceImpl implements PostService {
     private ModelMapper modelMapper;
 
 
-    @Override
+  /*  @Override
     public Optional<Post> checkForPost(Long postId) {
         return postRepository.findById(postId);
     }
+
+   */
 
     @Override
     public Post createPost(Post post) {
@@ -38,15 +45,16 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post getPostById(Long postId) {
+        Optional<Post> checkForPost = postRepository.findById(postId);
 
-        return checkForPost(postId).isPresent() ? checkForPost(postId).get() : null;
+        return checkForPost.orElse(null);
     }
 
     @Override
     public boolean deletePost(Long postId) {
-        //Optional<Post> savedPost = postRepository.findById(postId);
+        Optional<Post> checkForPost = postRepository.findById(postId);
 
-        if (checkForPost(postId).isPresent()) {
+        if (checkForPost.isPresent()) {
             postRepository.deleteById(postId);
             return true;
         }
@@ -54,12 +62,17 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public boolean updatePost(Long postId, Post post) {
-        //Optional<Post> savedPost = postRepository.findById(postId);
-        //Post updatedPost = savedPost.get();
-        //System.out.println(savedPost);
+    public boolean updatePost(Post updatedPost, Long id) {
 
-        return false;
+        Post post = postRepository.findById(id).orElse(null);
+
+        if (post != null) {
+            post.setTitle(updatedPost.getTitle());
+            post.setDescription(updatedPost.getDescription());
+            post.setContent(updatedPost.getContent());
+            return true;
+
+        } return false;
     }
 
 

@@ -7,6 +7,11 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ *
+ * @author chidiudo
+ */
+
 @Entity
 @Table(name = "posts")
 @Data

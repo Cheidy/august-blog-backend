@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+/**
+ *
+ * @author chidiudo
+ */
 
 @RestController
 @RequestMapping("api/v1/posts")
@@ -50,12 +54,12 @@ public class PostController {
                 new ResponseEntity(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping("/updatepost/")
-    public ResponseEntity<Post> updatePost(@RequestParam(value = "postid") Long postId,
-                                     @RequestBody PostDto postDto) {
-        Post post = modelMapper.map(postDto, Post.class);
+    @PutMapping("/updatepost/{id}")
+    public ResponseEntity<Post> updatePost(@RequestBody PostDto postDto,
+                                           @PathVariable(name = "id") Long id) {
+        Post updatedPost = modelMapper.map(postDto, Post.class);
 
-        return (postService.updatePost(postId, post)) ? new ResponseEntity<>(HttpStatus.OK) :
+        return (postService.updatePost(updatedPost, id)) ? new ResponseEntity<>(HttpStatus.OK) :
                 new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
