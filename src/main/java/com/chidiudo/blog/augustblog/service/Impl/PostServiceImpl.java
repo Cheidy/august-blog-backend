@@ -44,10 +44,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Post getPostById(Long postId) {
-        Optional<Post> checkForPost = postRepository.findById(postId);
+    public Optional<Post> getPostById(Long postId) {
+        //Optional<Post> checkForPost = postRepository.findById(postId);
 
-        return checkForPost.orElse(null);
+        return postRepository.findById(postId);
     }
 
     @Override

@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  *
@@ -40,27 +41,28 @@ public class PostController {
     }
 
     @GetMapping("/getpostbyid")
-    public ResponseEntity<Post> getPostById(@RequestParam(value = "postid") Long postId){
-        Post post = postService.getPostById(postId);
+    public ResponseEntity getPostById(@RequestParam(value = "postid") Long postId){
+        Optional<Post> post = postService.getPostById(postId);
 
-        return post != null ?
-                new ResponseEntity<>(post, HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return post.isPresent() ?
+                new ResponseEntity(post, HttpStatus.OK) : new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/deletepost")
     public ResponseEntity deletePost(@RequestParam(value = "postid") Long postId) {
 
         return (postService.deletePost(postId)) ?
-                new ResponseEntity(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PutMapping("/updatepost/{id}")
+    @PutMapping("/updatepost")
     public ResponseEntity<Post> updatePost(@RequestBody PostDto postDto,
-                                           @PathVariable(name = "id") Long id) {
+                                           @RequestParam(name = "id") Long id) {
         Post updatedPost = modelMapper.map(postDto, Post.class);
+        boolean getUpdatePost = postService.updatePost(updatedPost, id);
 
-        return (postService.updatePost(updatedPost, id)) ? new ResponseEntity<>(HttpStatus.OK) :
-                new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return getUpdatePost ?
+                new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
 }
