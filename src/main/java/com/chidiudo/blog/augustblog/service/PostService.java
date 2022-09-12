@@ -19,10 +19,10 @@ public interface PostService {
 
     List<Post> getAllPosts();
 
-    Optional<Post> getPostById(Long postId);
+    Post getPostById(Long postId);
 
-    boolean deletePost(Long postId);
+    void deletePost(Long postId);
 
-    boolean updatePost(Post updatedPost, Long id);
+    Post updatePost(Post updatedPost, Long id);
 
 }

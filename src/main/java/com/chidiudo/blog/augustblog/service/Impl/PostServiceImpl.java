@@ -2,6 +2,7 @@ package com.chidiudo.blog.augustblog.service.Impl;
 
 
 import com.chidiudo.blog.augustblog.entity.Post;
+import com.chidiudo.blog.augustblog.exception.ResourceNotFoundException;
 import com.chidiudo.blog.augustblog.repository.PostRepository;
 import com.chidiudo.blog.augustblog.service.PostService;
 import org.modelmapper.ModelMapper;
@@ -44,35 +45,38 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Optional<Post> getPostById(Long postId) {
-        //Optional<Post> checkForPost = postRepository.findById(postId);
-
-        return postRepository.findById(postId);
-    }
-
-    @Override
-    public boolean deletePost(Long postId) {
+    public Post getPostById(Long postId) {
         Optional<Post> checkForPost = postRepository.findById(postId);
 
+        //Using if statement to check if to throw exception
         if (checkForPost.isPresent()) {
-            postRepository.deleteById(postId);
-            return true;
+            return checkForPost.get();
+        } else {
+            throw new ResourceNotFoundException("Post", "postId", postId);
         }
-        return false;
     }
 
     @Override
-    public boolean updatePost(Post updatedPost, Long id) {
+    public void deletePost(Long postId) {
+        Post checkForPost = postRepository.findById(postId).orElseThrow(
+                () -> new ResourceNotFoundException("Post", "id", postId));
 
-        Post post = postRepository.findById(id).orElse(null);
+            postRepository.deleteById(postId);
+    }
 
-        if (post != null) {
+    @Override
+    public Post updatePost(Post updatedPost, Long id) {
+
+        Post post = postRepository.findById(id).orElseThrow(//using lambda to throw exception
+                () -> new ResourceNotFoundException("Post", "id", id));
+
             post.setTitle(updatedPost.getTitle());
             post.setDescription(updatedPost.getDescription());
             post.setContent(updatedPost.getContent());
-            return true;
+            postRepository.save(post);
 
-        } return false;
+            return post;
+
     }
 
 

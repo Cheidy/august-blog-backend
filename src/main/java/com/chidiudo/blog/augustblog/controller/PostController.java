@@ -40,29 +40,26 @@ public class PostController {
 
     }
 
-    @GetMapping("/getpostbyid")
-    public ResponseEntity getPostById(@RequestParam(value = "postid") Long postId){
-        Optional<Post> post = postService.getPostById(postId);
+    @GetMapping("/getpostbyid/{id}")
+    public ResponseEntity<Post> getPostById(@PathVariable(value = "id") Long postId){
 
-        return post.isPresent() ?
-                new ResponseEntity(post, HttpStatus.OK) : new ResponseEntity(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(postService.getPostById(postId), HttpStatus.OK);
     }
 
-    @DeleteMapping("/deletepost")
-    public ResponseEntity deletePost(@RequestParam(value = "postid") Long postId) {
+    @DeleteMapping("/deletepost/{id}")
+    public ResponseEntity deletePost(@PathVariable(value = "id") Long postId) {
 
-        return (postService.deletePost(postId)) ?
-                new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        postService.deletePost(postId);
+        return new ResponseEntity(HttpStatus.OK);
+
     }
 
-    @PutMapping("/updatepost")
-    public ResponseEntity<Post> updatePost(@RequestBody PostDto postDto,
-                                           @RequestParam(name = "id") Long id) {
+    @PutMapping("/updatepost/{id}")
+    public ResponseEntity<Post> updatePost(@PathVariable(name = "id") Long id,
+                                           @RequestBody PostDto postDto) {
         Post updatedPost = modelMapper.map(postDto, Post.class);
-        boolean getUpdatePost = postService.updatePost(updatedPost, id);
 
-        return getUpdatePost ?
-                new ResponseEntity<>(HttpStatus.OK) : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(postService.updatePost(updatedPost, id), HttpStatus.OK);
     }
 
 }
