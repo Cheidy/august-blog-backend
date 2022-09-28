@@ -17,7 +17,7 @@ public interface PostService {
 
     Post createPost(Post post);
 
-    List<Post> getAllPosts();
+    List<Post> getAllPosts(int page);
 
     Post getPostById(Long postId);
 
@@ -25,4 +25,5 @@ public interface PostService {
 
     Post updatePost(Post updatedPost, Long id);
 
+    List<Post> searchPosts(String query);
 }

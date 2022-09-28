@@ -7,8 +7,11 @@ import com.chidiudo.blog.augustblog.repository.PostRepository;
 import com.chidiudo.blog.augustblog.service.PostService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,8 +43,9 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> getAllPosts() {
-        return postRepository.findAll();
+    public List<Post> getAllPosts(int page) {
+
+        return postRepository.findAll(PageRequest.of(page, 3, Sort.by("title").ascending())).getContent();
     }
 
     @Override
@@ -70,6 +74,7 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findById(id).orElseThrow(//using lambda to throw exception
                 () -> new ResourceNotFoundException("Post", "id", id));
 
+            post.setTopic(updatedPost.getTopic());
             post.setTitle(updatedPost.getTitle());
             post.setDescription(updatedPost.getDescription());
             post.setContent(updatedPost.getContent());
@@ -77,6 +82,12 @@ public class PostServiceImpl implements PostService {
 
             return post;
 
+    }
+
+    @Override
+    public List<Post> searchPosts(String query) {
+
+        return postRepository.searchForPosts(query);
     }
 
 

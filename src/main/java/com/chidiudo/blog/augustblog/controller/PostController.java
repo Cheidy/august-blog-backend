@@ -24,19 +24,23 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-    @Autowired
-    private ModelMapper modelMapper;
 
     @PostMapping("/newpost")
-    public ResponseEntity<Post> createPost(@RequestBody PostDto postDto) {
-        Post post = modelMapper.map(postDto, Post.class);
+    public ResponseEntity<Post> createPost(@RequestBody Post post) {
+
         return new ResponseEntity<>(postService.createPost(post), HttpStatus.CREATED);
 
     }
 
-    @GetMapping("/listallposts")
-    public ResponseEntity<List<Post>> getAllPosts() {
-        return new ResponseEntity<>(postService.getAllPosts(), HttpStatus.OK);
+    @GetMapping("/listallposts/{page}")
+    public ResponseEntity<List<Post>> getAllPosts(@PathVariable(value = "page") int page) {
+        return new ResponseEntity<>(postService.getAllPosts(page), HttpStatus.OK);
+
+    }
+
+    @GetMapping("/searchposts")
+    public ResponseEntity<List<Post>> sortAllPosts(@RequestParam(value = "query") String query) {
+        return new ResponseEntity<>(postService.searchPosts(query), HttpStatus.OK);
 
     }
 
@@ -56,10 +60,9 @@ public class PostController {
 
     @PutMapping("/updatepost/{id}")
     public ResponseEntity<Post> updatePost(@PathVariable(name = "id") Long id,
-                                           @RequestBody PostDto postDto) {
-        Post updatedPost = modelMapper.map(postDto, Post.class);
+                                           @RequestBody Post post) {
 
-        return new ResponseEntity<>(postService.updatePost(updatedPost, id), HttpStatus.OK);
+        return new ResponseEntity<>(postService.updatePost(post, id), HttpStatus.OK);
     }
 
 }
